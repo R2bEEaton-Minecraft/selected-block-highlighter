@@ -3,14 +3,11 @@
 	"id": "selected-block-highlighter",
 	"version": "${version}",
 	"name": "Selected Block Highlighter",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Highlights all blocks nearby that match the item in your hand. Toggleable with a keybind (default: H) and configurable through ModMenu.",
 	"authors": [
-		"Me!"
+		"spea"
 	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
+	"contact": {},
 	"license": "CC0-1.0",
 	"icon": "assets/selected-block-highlighter/icon.png",
 	"environment": "*",
@@ -20,22 +17,19 @@
 		],
 		"client": [
 			"cc.spea.selectedblockhighlighter.SelectedBlockHighlighterClient"
+		],
+		"modmenu": [
+			"cc.spea.selectedblockhighlighter.integration.ModMenuIntegration"
 		]
 	},
-	"mixins": [
-		"selected-block-highlighter.mixins.json",
-		{
-			"config": "selected-block-highlighter.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
 		"fabricloader": ">=0.17.3",
 		"minecraft": "~1.20.1",
 		"java": ">=17",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"cloth-config": ">=11.0.0"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"modmenu": ">=7.0.0"
 	}
 }
