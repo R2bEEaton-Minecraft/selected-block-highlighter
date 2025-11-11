@@ -5,9 +5,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +20,7 @@ public class BlockScanner {
 
     private static List<BlockPos> matchingBlocks = new ArrayList<>();
     private static Block lastScannedBlock = null;
+    private static ItemStack lastScannedItem = ItemStack.EMPTY;
     private static BlockPos lastPlayerPos = null;
 
     public static List<BlockPos> getMatchingBlocks() {
@@ -29,27 +34,45 @@ public class BlockScanner {
         if (client.player == null || client.level == null || !config.isEnabled()) {
             matchingBlocks.clear();
             lastScannedBlock = null;
+            lastScannedItem = ItemStack.EMPTY;
             return;
         }
 
         ItemStack heldItem = client.player.getMainHandItem();
+        BlockPos playerPos = client.player.blockPosition();
 
-        // Only scan if holding a block item
-        if (!(heldItem.getItem() instanceof BlockItem blockItem)) {
+        // Determine what block to scan for
+        Block targetBlock = null;
+        boolean scanForFluidSource = false;
+
+        if (heldItem.getItem() instanceof BlockItem blockItem) {
+            // Holding a block item - scan for matching blocks
+            targetBlock = blockItem.getBlock();
+        } else if (heldItem.is(Items.WATER_BUCKET)) {
+            // Holding a water bucket - scan for water source blocks
+            targetBlock = Blocks.WATER;
+            scanForFluidSource = true;
+        } else if (heldItem.is(Items.LAVA_BUCKET)) {
+            // Holding a lava bucket - scan for lava source blocks
+            targetBlock = Blocks.LAVA;
+            scanForFluidSource = true;
+        } else {
+            // Not holding a valid item
             matchingBlocks.clear();
             lastScannedBlock = null;
+            lastScannedItem = ItemStack.EMPTY;
             return;
         }
 
-        Block targetBlock = blockItem.getBlock();
-        BlockPos playerPos = client.player.blockPosition();
-
         // Only rescan if player moved or changed held item
-        if (targetBlock.equals(lastScannedBlock) && playerPos.equals(lastPlayerPos)) {
+        if (targetBlock.equals(lastScannedBlock) &&
+            ItemStack.isSameItemSameComponents(heldItem, lastScannedItem) &&
+            playerPos.equals(lastPlayerPos)) {
             return;
         }
 
         lastScannedBlock = targetBlock;
+        lastScannedItem = heldItem.copy();
         lastPlayerPos = playerPos;
         matchingBlocks.clear();
 
@@ -64,7 +87,19 @@ public class BlockScanner {
                     BlockState state = level.getBlockState(pos);
 
                     if (state.getBlock() == targetBlock) {
-                        matchingBlocks.add(pos.immutable());
+                        // If scanning for fluid sources, check if it's a source block
+                        if (scanForFluidSource) {
+                            if (state.getBlock() instanceof LiquidBlock) {
+                                FluidState fluidState = state.getFluidState();
+                                // Only highlight source blocks (level 0 or isSource)
+                                if (fluidState.isSource()) {
+                                    matchingBlocks.add(pos.immutable());
+                                }
+                            }
+                        } else {
+                            // Regular block matching
+                            matchingBlocks.add(pos.immutable());
+                        }
                     }
                 }
             }
@@ -74,6 +109,7 @@ public class BlockScanner {
     public static void clear() {
         matchingBlocks.clear();
         lastScannedBlock = null;
+        lastScannedItem = ItemStack.EMPTY;
         lastPlayerPos = null;
     }
 }
