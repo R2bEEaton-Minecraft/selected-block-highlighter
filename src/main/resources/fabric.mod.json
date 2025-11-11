@@ -23,8 +23,16 @@
 		]
 	},
 	"depends": {
+		//? if =1.20.1 {
 		"fabricloader": ">=0.17.3",
 		"minecraft": "~1.20.1",
+		//?} elif =1.21 {
+		/*"fabricloader": ">=0.16.5",
+		"minecraft": "~1.21",
+		*///?} else {
+		/*"fabricloader": ">=0.16.5",
+		"minecraft": "~1.21.1",
+		*///?}
 		"java": ">=17",
 		"fabric-api": "*",
 		"cloth-config": ">=11.0.0"

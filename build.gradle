@@ -1,14 +1,17 @@
 plugins {
 	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
+	id 'dev.kikugie.stonecutter'
 }
+
+// Stonecutter will automatically load properties from versions/{version}/gradle.properties
+stonecutter.active '1.21.1' /* This is set by the Stonecutter plugin */
 
 version = project.mod_version
 group = project.maven_group
 
-base {
-	archivesName = project.archives_base_name
-}
+// Load stonecutter configuration
+apply from: 'stonecutter.gradle'
 
 repositories {
 	// Add repositories to retrieve artifacts from in here.
