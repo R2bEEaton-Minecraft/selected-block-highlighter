@@ -7,7 +7,9 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Matrix4f;
 
@@ -50,8 +52,13 @@ public class BlockHighlightRenderer {
         // Render filled boxes
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         for (BlockPos pos : blocks) {
-            VoxelShape shape = client.level.getBlockState(pos).getShape(client.level, pos);
-            if (shape.isEmpty()) {
+            BlockState state = client.level.getBlockState(pos);
+            VoxelShape shape = state.getShape(client.level, pos);
+
+            // If shape is empty (like fluids), check if there's a fluid and use full block
+            if (shape.isEmpty() && !client.level.getFluidState(pos).isEmpty()) {
+                shape = Shapes.block(); // Full block shape (0,0,0 to 1,1,1)
+            } else if (shape.isEmpty()) {
                 continue;
             }
 
@@ -69,8 +76,13 @@ public class BlockHighlightRenderer {
         // Render outlines
         buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
         for (BlockPos pos : blocks) {
-            VoxelShape shape = client.level.getBlockState(pos).getShape(client.level, pos);
-            if (shape.isEmpty()) {
+            BlockState state = client.level.getBlockState(pos);
+            VoxelShape shape = state.getShape(client.level, pos);
+
+            // If shape is empty (like fluids), check if there's a fluid and use full block
+            if (shape.isEmpty() && !client.level.getFluidState(pos).isEmpty()) {
+                shape = Shapes.block(); // Full block shape (0,0,0 to 1,1,1)
+            } else if (shape.isEmpty()) {
                 continue;
             }
 
