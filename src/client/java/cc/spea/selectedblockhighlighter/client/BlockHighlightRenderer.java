@@ -46,17 +46,17 @@ public class BlockHighlightRenderer {
 
         Tesselator tesselator = Tesselator.getInstance();
         //? if >=1.21.1 {
-        BufferBuilder buffer;
-        //?} else {
-        /*BufferBuilder buffer = tesselator.getBuilder();
-        *///?}
+        /*BufferBuilder buffer;
+        *///?} else {
+        BufferBuilder buffer = tesselator.getBuilder();
+        //?}
 
         // Render filled boxes
         //? if >=1.21.1 {
-        buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        //?} else {
-        /*buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        *///?}
+        /*buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        *///?} else {
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        //?}
         for (BlockPos pos : blocks) {
             VoxelShape shape = client.level.getBlockState(pos).getShape(client.level, pos);
             if (shape.isEmpty()) {
@@ -73,17 +73,17 @@ public class BlockHighlightRenderer {
             drawFilledBox(buffer, poseStack.last().pose(), minX, minY, minZ, maxX, maxY, maxZ, color[0], color[1], color[2], color[3]);
         }
         //? if >=1.21.1 {
-        com.mojang.blaze3d.vertex.BufferUploader.drawWithShader(buffer.buildOrThrow());
-        //?} else {
-        /*tesselator.end();
-        *///?}
+        /*com.mojang.blaze3d.vertex.BufferUploader.drawWithShader(buffer.buildOrThrow());
+        *///?} else {
+        tesselator.end();
+        //?}
 
         // Render outlines
         //? if >=1.21.1 {
-        buffer = tesselator.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        //?} else {
-        /*buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        *///?}
+        /*buffer = tesselator.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
+        *///?} else {
+        buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
+        //?}
         for (BlockPos pos : blocks) {
             VoxelShape shape = client.level.getBlockState(pos).getShape(client.level, pos);
             if (shape.isEmpty()) {
@@ -100,10 +100,10 @@ public class BlockHighlightRenderer {
             drawOutline(buffer, poseStack.last().pose(), minX, minY, minZ, maxX, maxY, maxZ, color[0], color[1], color[2], 1.0f);
         }
         //? if >=1.21.1 {
-        com.mojang.blaze3d.vertex.BufferUploader.drawWithShader(buffer.buildOrThrow());
-        //?} else {
-        /*tesselator.end();
-        *///?}
+        /*com.mojang.blaze3d.vertex.BufferUploader.drawWithShader(buffer.buildOrThrow());
+        *///?} else {
+        tesselator.end();
+        //?}
 
         // Restore rendering state
         RenderSystem.lineWidth(1.0f);
@@ -116,10 +116,10 @@ public class BlockHighlightRenderer {
 
     private static void addVertex(BufferBuilder buffer, Matrix4f matrix, float x, float y, float z, float red, float green, float blue, float alpha) {
         //? if >=1.21.1 {
-        buffer.addVertex(matrix, x, y, z).setColor(red, green, blue, alpha);
-        //?} else {
-        /*buffer.vertex(matrix, x, y, z).color(red, green, blue, alpha).endVertex();
-        *///?}
+        /*buffer.addVertex(matrix, x, y, z).setColor(red, green, blue, alpha);
+        *///?} else {
+        buffer.vertex(matrix, x, y, z).color(red, green, blue, alpha).endVertex();
+        //?}
     }
 
     private static void drawFilledBox(BufferBuilder buffer, Matrix4f matrix, double minX, double minY, double minZ,

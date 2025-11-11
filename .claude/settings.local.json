@@ -6,7 +6,8 @@
       "Bash(gradlew --version:*)",
       "Bash(./gradlew.bat:*)",
       "Bash(Select-String -Pattern \"(BUILD|FAILED|error|Compiling|> Task)\" -Context 0,2)",
-      "Bash(where:*)"
+      "Bash(where:*)",
+      "Bash(unzip:*)"
     ],
     "deny": [],
     "ask": []

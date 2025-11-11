@@ -40,7 +40,15 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
+}
 
+// Ensure client classes are included in the JAR
+jar {
+	from(sourceSets.client.output)
+}
+
+remapJar {
+	from(sourceSets.client.output)
 }
 
 // Register build task for all versions
@@ -64,13 +72,12 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	// ModMenu for config screen integration
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	// ModMenu for config screen integration (optional at runtime)
+	modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modLocalRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-	// Cloth Config for easy configuration GUI
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
+	// Cloth Config for easy configuration GUI (required at runtime, but not bundled)
+	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
 
 }
 
