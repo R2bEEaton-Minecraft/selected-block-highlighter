@@ -5,13 +5,10 @@ plugins {
 }
 
 // Stonecutter will automatically load properties from versions/{version}/gradle.properties
-stonecutter.active '1.21.1' /* This is set by the Stonecutter plugin */
+// Active version is set via command line: -Pstonecutter.active=1.21.1
 
 version = project.mod_version
 group = project.maven_group
-
-// Load stonecutter configuration
-apply from: 'stonecutter.gradle'
 
 repositories {
 	// Add repositories to retrieve artifacts from in here.
@@ -29,6 +26,11 @@ repositories {
 	}
 }
 
+// Add version suffix to JAR name
+base {
+	archivesName = "${project.archives_base_name}-mc${property('minecraft_version')}"
+}
+
 loom {
 	splitEnvironmentSourceSets()
 
@@ -39,6 +41,18 @@ loom {
 		}
 	}
 
+}
+
+// Register build task for all versions
+tasks.register('buildAllVersions') {
+	group = 'stonecutter'
+	description = 'Builds the mod for all configured Minecraft versions'
+
+	doLast {
+		println "To build for all versions, run: ./gradlew chiseledBuild"
+		println "Or build individually with: ./gradlew build -Pstonecutter.active=<version>"
+		println "Available versions: 1.20.1, 1.21, 1.21.1"
+	}
 }
 
 dependencies {

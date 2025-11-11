@@ -2,11 +2,16 @@
 
 This mod uses **Stonecutter** for multi-version support, allowing a single codebase to build for multiple Minecraft versions.
 
+## Requirements
+
+- **Java 17** or newer (Java 21 recommended for 1.21+)
+- Gradle 8.x (included via wrapper)
+
 ## Supported Versions
 
-- Minecraft 1.20.1
-- Minecraft 1.21
-- Minecraft 1.21.1
+- Minecraft 1.20.1 (requires Java 17+)
+- Minecraft 1.21 (requires Java 17+, Java 21 recommended)
+- Minecraft 1.21.1 (requires Java 17+, Java 21 recommended)
 
 ## Building for a Specific Version
 

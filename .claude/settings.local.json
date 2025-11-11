@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(dir:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(gradlew --version:*)",
+      "Bash(./gradlew.bat:*)",
+      "Bash(Select-String -Pattern \"(BUILD|FAILED|error|Compiling|> Task)\" -Context 0,2)",
+      "Bash(where:*)"
     ],
     "deny": [],
     "ask": []
